@@ -1,4 +1,5 @@
-const RANDOM_QUOTE_API_URL = 'http://api.quotable.io/random'
+const RANDOM_QUOTE_API_URL = 'https://baconipsum.com/api/?type=all-meat&paras=1' // ✅ JSON format
+
 const quoteDisplayElement = document.getElementById('quoteDisplay')
 const quoteInputElement = document.getElementById('quoteInput')
 const timerElement = document.getElementById('timer')
@@ -29,8 +30,8 @@ quoteInputElement.addEventListener('input', () => {
 
 function getRandomQuote() {
   return fetch(RANDOM_QUOTE_API_URL)
-    .then(response => response.json())
-    .then(data => data.content)
+    .then(response => response.json()) // ✅ valid JSON
+    .then(data => data[0]) // ✅ first paragraph string
 }
 
 async function renderNewQuote() {
@@ -46,11 +47,14 @@ async function renderNewQuote() {
 }
 
 let startTime
+let timerInterval
+
 function startTimer() {
+  clearInterval(timerInterval) // ✅ to avoid multiple intervals
   timerElement.innerText = 0
   startTime = new Date()
-  setInterval(() => {
-    timer.innerText = getTimerTime()
+  timerInterval = setInterval(() => {
+    timerElement.innerText = getTimerTime()
   }, 1000)
 }
 
